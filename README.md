@@ -2,7 +2,7 @@
 
 [Play ZK LUDO on GitHub Pages](https://techbaseml.github.io/zk-ludo/)
 
-The Pages edition in `docs/` supports Computer, Friend, Quick play and Practice. The included Node server provides online rooms when run separately.
+GitHub Pages hosts the board and the private-room interface. The dedicated Supabase project runs the authoritative rules and stores rooms. Invite links open the same GitHub Pages game.
 
 **ROLL • STRATEGIZE • CONQUER**  
 A free multiplayer board game by ZK LABS. [by TechBaseML](https://github.com/techbaseml)

@@ -513,7 +513,7 @@ function polling() {
             }
         }
         if (room) polling();
-    }, 250);
+    }, document.hidden ? 6500 : 1500);
 }
 async function onlineAction(a, b = {}) {
     if (onlineBusy) return;

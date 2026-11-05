@@ -133,7 +133,7 @@ const modes = [
     [
         'online',
         'Online multiplayer',
-        'Separate room server required.',
+        'Invite friends to a private room.',
         '#82baff'
     ],
     [
@@ -513,7 +513,7 @@ function polling() {
             }
         }
         if (room) polling();
-    }, 250);
+    }, document.hidden ? 6500 : 1500);
 }
 async function onlineAction(a, b = {}) {
     if (onlineBusy) return;
@@ -765,7 +765,7 @@ async function act(a) {
             else resetGame();
             break;
         case 'online':
-            modal('Online multiplayer', '<p class="muted">This GitHub Pages edition includes Computer, Friend, Quick play and Practice. Online rooms require the separate ZK LUDO room server.</p><div class="actions">' + btn('close', 'Back to play', true) + '</div>');
+            onlineMenu();
             break;
         case 'create':
         case 'join':

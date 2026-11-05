@@ -1,0 +1,9 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import vm from 'node:vm';import {track,point} from '../src/board.ts';import {lessons,scenario} from '../src/practice.ts';import {roll,move} from '../src/engine.ts';
+test('board geometry has a continuous shared circuit, own lane and finish for each color',()=>{assert.equal(new Set(track.map(String)).size,52);for(let c=0;c<4;c++)for(let s=0;s<56;s++){const [x,y]=point(c,s,0),[u,v]=point(c,s+1,0);assert.ok(Math.max(Math.abs(x-u),Math.abs(y-v))===1)}});
+test('guided exercises reuse legal game transitions',()=>{lessons.forEach((l,i)=>{const g=scenario(i,'Tester');roll(g,l[2]);move(g,0);if(i===2)assert.equal(g.players[0].captured,1);if(i===3)assert.equal(g.players[1].tokens[0],8);if(i===6)assert.equal(g.winner,0)})});
+test('PWA precaches build modules and serves offline root and invite URLs under a project path',async()=>{
+ const scope='https://example.test/zk-ludo/',events={},cached=new Map();const cache={addAll:async assets=>{for(const f of assets)cached.set(new URL(f,scope).href,await readFile('dist/'+f))},match:async key=>cached.get(key.url||key)};
+ const self={registration:{scope},addEventListener:(n,cb)=>events[n]=cb};vm.runInNewContext(await readFile('dist/sw.js','utf8'),{self,URL,location:new URL(scope),caches:{open:async()=>cache},fetch:()=>{throw Error('offline')}});
+ let ready;events.install({waitUntil:p=>ready=p});await ready;for(const path of ['', '?room=123','ui.js','board.js','icon-192.png','manifest.webmanifest']){let response;events.fetch({request:{method:'GET',mode:path===''||path[0]==='?'?'navigate':'cors',url:scope+path},respondWith:p=>response=p});assert.ok((await response)?.length>0)}
+ const manifest=JSON.parse(cached.get(scope+'manifest.webmanifest'));for(const icon of manifest.icons)assert.ok(cached.has(new URL(icon.src,scope).href));
+});
